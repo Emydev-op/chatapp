@@ -16,6 +16,7 @@ import { StatusBar } from "expo-status-bar";
 import { Octicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import Loading from "../components/Loading";
+import CustomKeyboardView from "../components/CustomKeyboardView";
 
 export default function SignIn() {
   const router = useRouter();
@@ -25,14 +26,14 @@ export default function SignIn() {
 
   const handleLogin = async () => {
     if (!emaiRef.current || !PasswordRef.current) {
-      Alert.alert("Sign In", "PLease fill all the fields");
+      Alert.alert("Sign In", "Please fill all the fields");
       return;
     }
     //Login Process
   };
 
   return (
-    <View className="flex-1 ">
+    <CustomKeyboardView>
       <StatusBar style="dark" />
       <View
         className="flex-1 space-y-12"
@@ -40,12 +41,12 @@ export default function SignIn() {
       >
         <View className="items-center">
           <Image
-            source={require("../assets/images/icon.png")}
+            source={require("../assets/images/react-logo.png")}
             style={{ height: hp(25) }}
             resizeMode="contain"
           />
         </View>
-        <View className="gap-10">
+        <View className="space-y-8">
           <Text
             style={{ fontSize: hp(4) }}
             className="font-bold tracking-wider text-center text-neutral-800"
@@ -56,25 +57,25 @@ export default function SignIn() {
           <View className="gap-4">
             <View
               style={{ height: hp(7) }}
-              className="flex-row gap-4 px-4 bg-neutral-100 items-center rounded-xl"
+              className="flex-row space-x-4 px-4 bg-neutral-100 justify-center items-center rounded-xl"
             >
               <Octicons name="mail" size={hp(2.7)} color="gray" />
               <TextInput
-                style={{ fontStyle: hp(2) }}
+                style={{ fontSize: hp(2.4), height: "100%" }}
                 className="flex-1 font-semibold text-neutral-700"
                 onChangeText={(value) => (emaiRef.current = value)}
                 placeholder="Email Address"
                 placeholderTextColor="gray"
               />
             </View>
-            <View className="gap-3">
+            <View className="gap-y-3">
               <View
                 style={{ height: hp(7) }}
-                className="flex-row gap-4 px-4 bg-neutral-100 items-center rounded-xl"
+                className="flex-row space-x-4 px-4 bg-neutral-100 items-center rounded-xl"
               >
                 <Octicons name="lock" size={hp(2.7)} color="gray" />
                 <TextInput
-                  style={{ fontStyle: hp(2) }}
+                  style={{ fontSize: hp(2.4) }}
                   secureTextEntry
                   onChangeText={(value) => (PasswordRef.current = value)}
                   className="flex-1 font-semibold text-neutral-700"
@@ -90,10 +91,10 @@ export default function SignIn() {
               </Text>
             </View>
             {/* Button */}
-            <>
+            <View>
               {isLoading ? (
                 <View className="flex-row justify-center">
-                  <Loading size={hp(6.5)}/>
+                  <Loading size={hp(6.5)} />
                 </View>
               ) : (
                 <TouchableOpacity
@@ -109,16 +110,16 @@ export default function SignIn() {
                   </Text>
                 </TouchableOpacity>
               )}
-            </>
+            </View>
             {/* Signup text */}
-            <View className="flex-row">
+            <View className="flex-row justify-center">
               <Text
                 style={{ fontSize: hp(1.8) }}
                 className="font-semibold text-neutral-500"
               >
                 Don't have an account?{" "}
               </Text>
-              <Pressable onPress={() => router.push("signUp")}>
+              <Pressable onPress={() => router.push("SignUp")}>
                 <Text
                   style={{ fontSize: hp(1.8) }}
                   className="font-bold text-indigo-500"
@@ -130,6 +131,6 @@ export default function SignIn() {
           </View>
         </View>
       </View>
-    </View>
+    </CustomKeyboardView>
   );
 }
