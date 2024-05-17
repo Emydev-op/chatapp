@@ -17,19 +17,31 @@ import { Octicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import Loading from "../components/Loading";
 import CustomKeyboardView from "../components/CustomKeyboardView";
+import { useAuth } from "../context/authContext";
 
 export default function SignIn() {
   const router = useRouter();
-  const emaiRef = useRef("");
+  const emailRef = useRef("");
+  const { login } = useAuth();
   const PasswordRef = useRef("");
   const [isLoading, setIsLoading] = useState(false);
 
   const handleLogin = async () => {
-    if (!emaiRef.current || !PasswordRef.current) {
+    if (!emailRef.current || !PasswordRef.current) {
       Alert.alert("Sign In", "Please fill all the fields");
       return;
     }
     //Login Process
+     setIsLoading(true);
+     let response = await login(
+       emailRef.current,
+       PasswordRef.current,
+     );
+     setIsLoading(false);
+     console.log("got result", response);
+     if (!response.success) {
+       Alert.alert("Sign In", response.msg);
+     }
   };
 
   return (
@@ -63,7 +75,7 @@ export default function SignIn() {
               <TextInput
                 style={{ fontSize: hp(2.4), height: "100%" }}
                 className="flex-1 font-semibold text-neutral-700"
-                onChangeText={(value) => (emaiRef.current = value)}
+                onChangeText={(value) => (emailRef.current = value)}
                 placeholder="Email Address"
                 placeholderTextColor="gray"
               />

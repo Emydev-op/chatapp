@@ -17,10 +17,12 @@ import { Feather, Octicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import Loading from "../components/Loading";
 import CustomKeyboardView from "../components/CustomKeyboardView";
+import { useAuth } from "../context/authContext";
 
 export default function SignUp() {
   const router = useRouter();
-  const emaiRef = useRef("");
+  const { register } = useAuth();
+  const emailRef = useRef("");
   const PasswordRef = useRef("");
   const userNameRef = useRef("");
   const ProfileRef = useRef("");
@@ -29,13 +31,25 @@ export default function SignUp() {
 
   const handleRegister = async () => {
     if (
-      !emaiRef.current ||
+      !emailRef.current ||
       !PasswordRef.current ||
       !userNameRef.current ||
       !ProfileRef.current
     ) {
       Alert.alert("Sign Up", "PLease fill all the fields");
       return;
+    }
+    setIsLoading(true);
+    let response = await register(
+      emailRef.current,
+      PasswordRef.current,
+      userNameRef.current,
+      ProfileRef.current
+    );
+    setIsLoading(false);
+    console.log("got result" , response);
+    if(!response.success) {
+      Alert.alert("Sign Up", response.msg);
     }
     //Register Process
   };
@@ -85,7 +99,7 @@ export default function SignUp() {
               <TextInput
                 style={{ fontSize: hp(2.2), height: "100%" }}
                 className="flex-1 font-semibold text-neutral-700"
-                onChangeText={(value) => (emaiRef.current = value)}
+                onChangeText={(value) => (emailRef.current = value)}
                 placeholder="Email Address"
                 placeholderTextColor="gray"
               />
